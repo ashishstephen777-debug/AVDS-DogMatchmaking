@@ -4,6 +4,7 @@ from functools import lru_cache
 from typing import Any, Dict, List, Optional
 
 from fastapi import FastAPI
+from fastapi.responses import RedirectResponse
 from pydantic import BaseModel, Field
 
 from dogmatch.pipeline import (
@@ -15,6 +16,16 @@ from dogmatch.pipeline import (
 
 
 app = FastAPI(title="AVDS Dog Matching + Adoption Risk", version="0.1.0")
+
+@app.get("/")
+def root() -> Dict[str, Any]:
+    # Redirect to Swagger so opening the app URL shows a UI immediately.
+    return RedirectResponse(url="/docs")
+
+
+@app.get("/health")
+def health() -> Dict[str, str]:
+    return {"status": "ok"}
 
 
 class PreferredTraits(BaseModel):
